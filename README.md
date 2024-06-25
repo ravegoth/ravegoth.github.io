@@ -1,1 +1,1 @@
-# [https://ravegoth.github.io](ravegoth.github.io)
+# [ravegoth.github.io](https://ravegoth.github.io)
