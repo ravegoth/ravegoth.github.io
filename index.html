@@ -20,11 +20,12 @@
         }
 
         .content {
+            width: min(1180px, 100%);
             background-image: url('https://e0.pxfuel.com/wallpapers/314/795/desktop-wallpaper-black-skull-emo-quotes-skull-skulls.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            padding: 20px;
+            padding: 24px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(3px);
@@ -53,15 +54,83 @@
             color: #ccc;
             text-shadow: 1px 1px 2px #000;
         }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .project-card {
+            min-width: 0;
+            padding: 14px 15px;
+            background: rgba(0, 0, 0, 0.58);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            background: rgba(0, 0, 0, 0.72);
+            border-color: rgba(255, 0, 0, 0.45);
+            transform: translateY(-1px);
+        }
+
+        .project-name {
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 7px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .project-description {
+            display: block;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .project-date {
+            display: block;
+            margin-top: 9px;
+            color: #9ca3af;
+            font-size: 0.78rem;
+            line-height: 1.35;
+        }
+
+        @media (max-width: 959px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 599px) {
+            body {
+                padding: 10px !important;
+            }
+
+            .content {
+                padding: 18px;
+            }
+
+            .projects-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 11px;
+            }
+        }
     </style>
 </head>
 
 <body class="flex flex-col justify-center items-center min-h-screen p-4">
-    <div class="w-full max-w-2xl p-6 bg-black bg-opacity-70 rounded-lg content">
+    <div class="p-6 bg-black bg-opacity-70 rounded-lg content">
         <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4 text-shadow-custom glowing">ravegoth - <a href="https://github.com/ravegoth/" class="text-blue-400 hover:text-red-500" target="_blank" rel="noopener noreferrer">github</a></h1>
         <h3 class="text-2xl md:text-3xl font-bold text-white text-center mb-6 text-shadow-custom glowing">list of projects</h3>
-        <ul class="list-disc list-inside space-y-4">
-            <h4 class="text-white text-center">Loading projects...</h4>
+        <ul id="projects" class="projects-grid">
+            <li class="text-white text-center">Loading projects...</li>
         </ul>
     </div>
 
@@ -75,8 +144,10 @@
                     return response.json();
                 })
                 .then(data => {
+                    const projectsContainer = document.getElementById('projects');
+
                     if (data.length === 0) {
-                        document.querySelector('ul').innerHTML = '<p class="text-white text-center">No projects found.</p>';
+                        projectsContainer.innerHTML = '<li class="text-white text-center">No projects found.</li>';
                         return;
                     }
 
@@ -88,19 +159,19 @@
                         const description = project.description || 'No description provided.';
 
                         return `
-                            <li class="text-white text-shadow-custom">
-                                <a href="${project.html_url}" target="_blank" rel="noopener noreferrer" class="hover:text-red-500">${project.name}</a>
-                                <span class="description-text">- ${description}</span>
-                                <span class="text-gray-400 text-sm block md:inline"> (Last modified: ${lastModifiedFormatted})</span>
+                            <li class="project-card text-white text-shadow-custom">
+                                <a href="${project.html_url}" target="_blank" rel="noopener noreferrer" class="project-name hover:text-red-500">${project.name}</a>
+                                <span class="project-description description-text">${description}</span>
+                                <span class="project-date">Last modified: ${lastModifiedFormatted}</span>
                             </li>
                         `;
                     });
 
-                    document.querySelector('ul').innerHTML = projects.join('');
+                    projectsContainer.innerHTML = projects.join('');
                 })
                 .catch(error => {
                     console.error('Error fetching projects:', error);
-                    document.querySelector('ul').innerHTML = `<p class="text-red-400 text-center">Failed to load projects. Please try again later.</p>`;
+                    document.getElementById('projects').innerHTML = '<li class="text-red-400 text-center">Failed to load projects. Please try again later.</li>';
                 });
         }
 
