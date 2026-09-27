@@ -16,7 +16,7 @@
         body {
             background-image: url('https://ravegoth.github.io/bg.png');
             background-repeat: repeat;
-            background-position: 0 -1px;
+            background-position: 0 0;
             color: white;
             font-family: 'Roboto Mono', monospace;
         }
@@ -184,6 +184,28 @@
         }
 
         getProjects();
+
+        // Scroll the tiled background upward at 1px per simulated 120 Hz frame.
+        let backgroundY = 0;
+        let lastFrameTime = performance.now();
+        let frameAccumulator = 0;
+
+        function animateBackground(now) {
+            const deltaMs = Math.min(now - lastFrameTime, 100);
+            lastFrameTime = now;
+            frameAccumulator += deltaMs * 120 / 1000;
+
+            const wholeFrames = Math.floor(frameAccumulator);
+            if (wholeFrames > 0) {
+                backgroundY -= wholeFrames;
+                frameAccumulator -= wholeFrames;
+                document.body.style.backgroundPosition = `0 ${backgroundY}px`;
+            }
+
+            requestAnimationFrame(animateBackground);
+        }
+
+        requestAnimationFrame(animateBackground);
     </script>
 </body>
 
