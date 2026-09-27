@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="13" fill="#080808"/>
+  <circle cx="32" cy="32" r="24" fill="#120000" stroke="#ff1616" stroke-width="3"/>
+  <text x="32" y="44" text-anchor="middle" font-size="38" font-family="Arial Unicode MS, Segoe UI Symbol, Noto Sans Symbols, sans-serif" fill="#ff1616">☣</text>
+</svg>
